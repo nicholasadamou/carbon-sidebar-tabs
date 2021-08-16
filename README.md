@@ -4,7 +4,7 @@
 
 # How To Use
 
-Please take a look at [App.js](src/App.js) fir for full example and documentation.
+Please take a look at [App.js](src/App.js) for a full example and documentation.
 
 To add new tabs add this item as a child to the `<SideNav>` component.
 
