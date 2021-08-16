@@ -61,8 +61,6 @@ const App = () => {
     const changeTab = (e) => {
         let element = e.target;
 
-        debugger;
-
         if (element.className.includes('text')) {
             element = element.parentNode;
         }
