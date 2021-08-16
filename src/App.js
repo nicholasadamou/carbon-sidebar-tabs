@@ -2,75 +2,31 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {
-    SideNav,
-    SideNavItems,
-    SideNavMenuItem,
-} from 'carbon-components-react/lib/components/UIShell';
+import SideNav from './components/SideNav';
+import SideNavItems from './components/SideNavItems';
+import SideNavMenuItem from './components/SideNavMenuItem';
 
 import './App.scss';
 
-/**
- * To add new tabs add this item as a child to the <SideNav> component.
- *
- * <SideNavMenuItem
-		onClick={(e) => changeTab(e)}
-		tab={#} <--- tab #. Make sure this is a distinct number from other tabs.
-	>
-		[tab title] <--- This is how the tab will be displayed on the sidebar.
-	</SideNavMenuItem>
-
-
-	To add the content that is shown to the right of the sidebar,
-	add the following as a child to the div#tab-content-container:
-
-	<Tab
-		className="tab-#" <---- This number must match the corresponding <SideNavMenuItem tab={#}> as mentioned above.
-		title="title" <--- What is shown in the <TopHeader> component.
-	>
-		<Content> <--- Place your component for this tab here.
-	</Tab>
- */
-
 const Container = styled.div`
-    .bx--side-nav__items {
-        padding-top: 2rem;
-
-        background-color: #f4f4f4;
-    }
-
-    a.bx--side-nav__link[aria-current='page'],
-    a.bx--side-nav__link--current {
-        background-color: #dcdcdc;
-    }
-
-    a.bx--side-nav__link > .bx--side-nav__link-text,
-    .bx--side-nav a.bx--header__menu-item .bx--text-truncate-end {
-        font-size: 1rem;
-        color: black;
-    }
-
-    .bx--side-nav__link {
-        cursor: pointer;
-    }
-
-    a.bx--side-nav__link,
-    .bx--side-nav a.bx--header__menu-item,
-    .bx--side-nav
-        .bx--header__menu-title[aria-expanded='true']
-        + .bx--header__menu {
-        min-height: 3rem;
-
-        font-weight: 400;
+    #tab-content-container {
+        overflow-y: scroll;
     }
 
     .tab-container {
         margin-left: 16rem;
+
+        .tab-content {
+            margin: 32px 32px 48px 32px;
+        }
     }
 `;
 
-const Content = (props) => (
-    <div className={`tab-container ${props.className}`}>{props.children}</div>
+const Tab = (props) => (
+    <div className={`tab-container ${props.className}`}>
+        <h3>{props.title}</h3>
+        <div className="tab-content">{props.children}</div>
+    </div>
 );
 
 const App = () => {
@@ -78,7 +34,7 @@ const App = () => {
         const document = window.document.body;
 
         const tabButtons = Array.from(
-            document.querySelector('#tab-buttons').firstChild.children
+            document.querySelector('.side-nav__navigation').firstChild.children
         );
         const tabContainers = Array.from(
             document.querySelector('#tab-content-container').children
@@ -103,18 +59,11 @@ const App = () => {
     }, []);
 
     const changeTab = (e) => {
-        // if tab-# is active (e.g. has the --current class)
-        // .tab-# content is visible
-        // all other .tab-# content is display: none
-
-        // if tab # is not active
-        // make tab-# active
-        // .tab-# content is visible
-        // all other .tab-# content is display: none
-
         let element = e.target;
 
-        if (element.className.includes('bx--side-nav__link-text')) {
+        debugger;
+
+        if (element.className.includes('text')) {
             element = element.parentNode;
         }
 
@@ -135,12 +84,12 @@ const App = () => {
 
             if (firstChild.className.includes('--current')) {
                 firstChild.className = firstChild.className
-                    .replace('bx--side-nav__link--current', '')
+                    .replace('side-nav__button--current', '')
                     .trim();
             }
         });
 
-        element.className = `${element.className} bx--side-nav__link--current`;
+        element.className = `${element.className} side-nav__button--current`;
 
         tabs = Array.from(parent.nextSibling.children);
 
@@ -155,16 +104,11 @@ const App = () => {
 
     return (
         <Container>
-            <SideNav
-                expanded
-                isFixedNav
-                isChildOfHeader={false}
-                id="tab-buttons"
-            >
+            <SideNav>
                 <SideNavItems>
                     <SideNavMenuItem
-                        onClick={(e) => changeTab(e)}
                         tab={1}
+                        onClick={(e) => changeTab(e)}
                         isActive
                     >
                         Tab 1
@@ -175,12 +119,12 @@ const App = () => {
                 </SideNavItems>
             </SideNav>
             <div id="tab-content-container">
-                <Content className="tab-1">
-                    <p>Tab Content 0</p>
-                </Content>
-                <Content className="tab-2">
-                    <p>Tab Content 1</p>
-                </Content>
+                <Tab className="tab-1" title="Test 1">
+                    <p>Test 1</p>
+                </Tab>
+                <Tab className="tab-2" title="Test 2">
+                    <p>Test 2</p>
+                </Tab>
             </div>
         </Container>
     );
